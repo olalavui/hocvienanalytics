@@ -1,0 +1,77 @@
+<script type="text/javascript">
+  
+/* Start tawk.to base code */  
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/{{tawk.to-ID}}/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+// Day su kien tawk.to từ API tawk.to thong qua GTM
+	var dataLayerPush = function(event){
+                          dataLayer.push({
+                              'event': 'tawk.to',
+                              'eventAction': event
+                          });
+                              console.log({
+                              'event': 'tawk.to',
+                              'eventAction': event
+                          });
+  						}  
+  Tawk_API.onChatStarted = function(){
+    if(Tawk_API.isVisitorEngaged()){
+    window.dataLayer = window.dataLayer || [];
+	var pathurl = location.href;
+  	var url = 'https://hooks.slack.com/services/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';
+  	var text = 'Thông báo: Bạn có tin nhắn chat mới từ ';
+  	var text = text+pathurl;
+  	var text = text+'.Khách từ nguồn: ';
+  	var text = text+source;
+  	var text = text+'thông qua: ';
+  	var text = text+medium;
+  	var text = text+'chiến dịch: ';
+  	var text = text+campaign;
+  	var text = text+ 'Login chát tại: <https://dashboard.tawk.to/#/dashboard|Tawk.to>';
+jQuery.ajax({
+    data: 'payload=' + JSON.stringify({
+        "text": text
+    }),
+    dataType: 'json',
+    processData: false,
+    type: 'POST',
+    url: url
+});
+      dataLayerPush("Chat Started");
+    	fbq('trackCustom','tawk.to',{
+        'event': 'chat-started',
+        'page' : {{Page Path}}    
+  });
+	}};
+  Tawk_API.onChatEnded = function(){
+      window.dataLayer = window.dataLayer || [];
+	  dataLayerPush("Chat Ended");
+    fbq('trackCustom','tawk.to',{
+      'event': 'chat-ended',
+      'page' : {{Page Path}}    
+  })
+	};
+  Tawk_API.onPrechatSubmit = function(data){
+    window.dataLayer = window.dataLayer || [];
+   	dataLayerPush("Prechat form submitted");
+    fbq('trackCustom','tawk.to',{
+      'event': 'prechat-submit',
+      'page' : {{Page Path}}    
+  });
+	};
+  Tawk_API.onOfflineSubmit = function(data){
+    window.dataLayer = window.dataLayer || [];
+    dataLayerPush("Offline Chat Submit");
+    fbq('trackCustom','tawk.to',{
+      'event': 'chat-offline',
+      'page' : {{Page Path}}
+  });
+	};
+</script>
